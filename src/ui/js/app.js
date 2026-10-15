@@ -1,5 +1,5 @@
 /**
- * S_Audio_Pin_Linux — Frontend Application Controller
+ * S_Audio_Pin_Linux — Frontend Application Controller (macOS Pro Studio Edition)
  */
 
 // State
@@ -20,6 +20,8 @@ let reconnectTimer = null;
 // DOM Elements
 const appsListEl = document.getElementById('appsList');
 const micsListEl = document.getElementById('micsList');
+const appsCountEl = document.getElementById('appsCount');
+const micsCountEl = document.getElementById('micsCount');
 const armedCountEl = document.getElementById('armedCount');
 const configFormatTagEl = document.getElementById('configFormatTag');
 const configModeTagEl = document.getElementById('configModeTag');
@@ -72,7 +74,7 @@ function setupEventListeners() {
   btnToastOpenFolder.addEventListener('click', () => openFolder());
   btnToastDismiss.addEventListener('click', () => { completionToast.style.display = 'none'; });
 
-  // Quick Mode Switch in bottom bar
+  // Quick Mode Switch in bottom dock
   quickModeToggle.addEventListener('change', async (e) => {
     const newMode = e.target.checked ? 'multi_stem' : 'single_mix';
     currentConfig.mode = newMode;
@@ -102,14 +104,13 @@ function setupEventListeners() {
       if (!confirm(msg)) return;
 
       document.body.innerHTML = `
-        <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0b0f19; color: #94a3b8; font-family: system-ui, -apple-system, sans-serif; gap: 1.2rem; text-align: center; padding: 2rem;">
-          <div style="font-size: 3.5rem;">🎙️</div>
-          <h2 style="color: #f8fafc; margin: 0; font-size: 1.6rem;">Завершення роботи...</h2>
-          <p style="margin: 0; color: #64748b;">Зупиняємо аудіопотоки та вимикаємо додаток.</p>
+        <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0c0d12; color: #a1a1aa; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; gap: 1rem; text-align: center; padding: 2rem;">
+          <div style="font-size: 2.8rem;">🎙️</div>
+          <h2 style="color: #ffffff; margin: 0; font-size: 1.4rem; font-weight: 600;">Завершення роботи...</h2>
+          <p style="margin: 0; color: #71717a; font-size: 0.9rem;">Зупиняємо аудіопотоки та вимикаємо сервер S_Audio_Pin.</p>
         </div>
       `;
 
-      // Send shutdown request via fetch and sendBeacon
       try {
         if (navigator.sendBeacon) {
           navigator.sendBeacon('/api/shutdown');
@@ -145,7 +146,7 @@ async function loadConfig() {
 function updateModeDisplay() {
   const isMp3 = currentConfig.format === 'mp3';
   configFormatTagEl.textContent = isMp3 ? `MP3 • ${currentConfig.bitrate}` : 'WAV • Lossless';
-  configModeTagEl.textContent = currentConfig.mode === 'multi_stem' ? 'Окремі стеми' : 'Зведений мікс';
+  configModeTagEl.textContent = currentConfig.mode === 'multi_stem' ? 'Стеми' : 'Зведений мікс';
   quickModeToggle.checked = currentConfig.mode === 'multi_stem';
 }
 
@@ -155,8 +156,14 @@ async function fetchSources() {
     const res = await fetch('/api/sources');
     if (res.ok) {
       const data = await res.json();
-      renderSourcesList(appsListEl, data.apps || [], 'app');
-      renderSourcesList(micsListEl, data.mics || [], 'mic');
+      const apps = data.apps || [];
+      const mics = data.mics || [];
+
+      if (appsCountEl) appsCountEl.textContent = apps.length;
+      if (micsCountEl) micsCountEl.textContent = mics.length;
+
+      renderSourcesList(appsListEl, apps, 'app');
+      renderSourcesList(micsListEl, mics, 'mic');
       updateArmedCount();
     }
   } catch (err) {
@@ -193,8 +200,9 @@ function renderSourcesList(container, sources, type) {
       const card = container.querySelector(`[data-source-id="${src.id}"]`);
       if (card) {
         const checkbox = card.querySelector('.custom-checkbox');
-        checkbox.checked = selectedSourceIds.has(src.id);
-        card.classList.toggle('selected', selectedSourceIds.has(src.id));
+        const isArmed = selectedSourceIds.has(src.id);
+        checkbox.checked = isArmed;
+        card.classList.toggle('selected', isArmed);
       }
     });
   }
@@ -202,14 +210,15 @@ function renderSourcesList(container, sources, type) {
 
 function createSourceCard(src) {
   const card = document.createElement('div');
-  card.className = 'source-card' + (selectedSourceIds.has(src.id) ? ' selected' : '');
+  const isArmed = selectedSourceIds.has(src.id);
+  card.className = 'source-card' + (isArmed ? ' selected' : '');
   card.dataset.sourceId = src.id;
 
   const isApp = src.type === 'app';
   const iconEmoji = isApp ? '🎵' : '🎙️';
   const pidTag = src.pid ? `<span class="tag-pid">PID: ${src.pid}</span>` : '';
-  const streamBadge = (isApp && src.stream_count > 1) ? `<span class="tag-streams">${src.stream_count} аудіопотоки</span>` : '';
-  const micBadge = !isApp ? `<span class="tag-mic">Вхідний мікрофон</span>` : '';
+  const streamBadge = (isApp && src.stream_count > 1) ? `<span class="tag-streams">${src.stream_count} стрім.</span>` : '';
+  const micBadge = !isApp ? `<span class="tag-mic">Вхід</span>` : '';
 
   card.innerHTML = `
     <div class="source-avatar">${iconEmoji}</div>
@@ -219,30 +228,34 @@ function createSourceCard(src) {
         ${pidTag}
         ${streamBadge}
         ${micBadge}
-        <span>${src.channels === 1 ? 'Моно' : 'Стерео'} • ${src.sample_rate} Hz</span>
+        <span class="tag-specs">${src.channels === 1 ? 'Mono' : 'Stereo'} • ${Math.round(src.sample_rate / 1000)}kHz</span>
       </div>
     </div>
     <div class="meter-container">
       <div class="meter-labels">
-        <span>-48dB</span>
-        <span>-12dB</span>
+        <span>-24</span>
+        <span>-12</span>
+        <span>-6</span>
         <span>0dB</span>
       </div>
       <canvas class="meter-canvas" id="canvas_${src.id.replace(':', '_')}"></canvas>
     </div>
     <div class="checkbox-wrapper">
-      <input type="checkbox" class="custom-checkbox" ${selectedSourceIds.has(src.id) ? 'checked' : ''}>
+      <input type="checkbox" class="custom-checkbox" ${isArmed ? 'checked' : ''}>
+      <button type="button" class="arm-btn" title="Вибрати це джерело для запису (ARM)">
+        <span class="arm-dot"></span>
+        <span class="arm-text">ARM</span>
+      </button>
     </div>
   `;
 
   // Toggle selection on card click
   card.addEventListener('click', (e) => {
-    if (e.target.tagName !== 'INPUT') {
-      const checkbox = card.querySelector('.custom-checkbox');
-      checkbox.checked = !checkbox.checked;
-    }
-    const isChecked = card.querySelector('.custom-checkbox').checked;
-    if (isChecked) {
+    const checkbox = card.querySelector('.custom-checkbox');
+    checkbox.checked = !checkbox.checked;
+    const nowArmed = checkbox.checked;
+
+    if (nowArmed) {
       selectedSourceIds.add(src.id);
       card.classList.add('selected');
     } else {

@@ -1,301 +1,395 @@
-/* S_Audio_Pin_Linux Design System */
+/* ==========================================================================
+   S_Audio_Pin_Linux — macOS Pro Studio Design System
+   Aesthetic: Liquid Glassmorphism, Apple Pro Audio / Sonoma & Logic Pro Style
+   ========================================================================== */
+
 :root {
-  --bg-base: #0a0c13;
-  --bg-surface: #121520;
-  --bg-surface-elevated: #1a1e2e;
-  --bg-card: rgba(26, 30, 46, 0.7);
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-active: rgba(99, 102, 241, 0.4);
-  
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  
-  --accent-primary: #6366f1;
-  --accent-primary-hover: #4f46e5;
-  --accent-cyan: #06b6d4;
-  --accent-cyan-glow: rgba(6, 182, 212, 0.35);
-  
-  --meter-green: #10b981;
-  --meter-yellow: #f59e0b;
-  --meter-red: #ef4444;
-  --meter-bg: #1e293b;
-  
-  --rec-red: #f43f5e;
-  --rec-red-glow: rgba(244, 63, 94, 0.4);
-  
+  /* macOS Dark Canvas & Materials */
+  --mac-canvas: #0c0d12;
+  --mac-window-bg: rgba(18, 20, 26, 0.88);
+  --mac-surface: rgba(28, 30, 40, 0.62);
+  --mac-surface-elevated: rgba(38, 41, 54, 0.78);
+  --mac-surface-card: rgba(24, 26, 36, 0.65);
+  --mac-surface-hover: rgba(255, 255, 255, 0.06);
+  --mac-surface-active: rgba(255, 255, 255, 0.11);
+
+  /* Hairline Borders & Inner Bevels */
+  --mac-border-subtle: rgba(255, 255, 255, 0.08);
+  --mac-border-medium: rgba(255, 255, 255, 0.14);
+  --mac-border-highlight: rgba(255, 255, 255, 0.22);
+  --mac-inner-bevel: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+
+  /* Apple System Accent Colors */
+  --apple-blue: #0a84ff;
+  --apple-blue-hover: #0071e3;
+  --apple-blue-subtle: rgba(10, 132, 255, 0.16);
+  --apple-blue-glow: rgba(10, 132, 255, 0.35);
+
+  --apple-red: #ff453a;
+  --apple-red-hover: #e0241b;
+  --apple-red-subtle: rgba(255, 69, 58, 0.15);
+  --apple-red-glow: rgba(255, 69, 58, 0.35);
+
+  --apple-green: #30d158;
+  --apple-green-glow: rgba(48, 209, 88, 0.3);
+
+  --apple-amber: #ffd60a;
+  --apple-purple: #bf5af2;
+  --apple-teal: #64d2ff;
+
+  /* Typography */
+  --mac-text-primary: #ffffff;
+  --mac-text-secondary: rgba(255, 255, 255, 0.72);
+  --mac-text-muted: rgba(255, 255, 255, 0.44);
+  --mac-text-dim: rgba(255, 255, 255, 0.28);
+
+  --font-sf: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", -apple-system-subheading, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Monaco, Consolas, monospace;
+
+  /* Radii */
+  --radius-xs: 5px;
   --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --radius-full: 9999px;
-  
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, Cantarell, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  
-  --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.25);
-  --shadow-rec: 0 0 24px var(--rec-red-glow);
+  --radius-md: 11px;
+  --radius-lg: 14px;
+  --radius-pill: 9999px;
+
+  /* Shadows */
+  --shadow-window: 0 16px 48px -8px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --shadow-dock: 0 14px 36px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  --shadow-popover: 0 12px 32px rgba(0, 0, 0, 0.5);
 }
 
-* {
+/* Base Reset */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 body {
-  font-family: var(--font-sans);
-  background-color: var(--bg-base);
-  color: var(--text-primary);
-  line-height: 1.5;
+  font-family: var(--font-sf);
+  background-color: var(--mac-canvas);
+  color: var(--mac-text-primary);
+  line-height: 1.45;
   -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-  overflow-x: hidden;
-  background-image: 
-    radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+  -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(10, 132, 255, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 30% at 80% 85%, rgba(191, 90, 242, 0.06) 0%, transparent 60%);
   background-attachment: fixed;
 }
 
-.app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  padding-bottom: 120px;
+/* Custom Sleek macOS Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-pill);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
 }
 
-/* Glassmorphic card styling */
+/* Glass Surface Utility */
 .glass {
-  background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-subtle);
+  background: var(--mac-surface);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid var(--mac-border-subtle);
+  box-shadow: var(--mac-inner-bevel);
 }
 
 .card {
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
 }
 
-/* Header */
+/* Main Application Shell */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ==========================================================================
+   1. macOS Unified Header / Titlebar
+   ========================================================================== */
 .app-header {
+  height: 48px;
+  min-height: 48px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 2rem;
-  background: rgba(18, 21, 32, 0.85);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-subtle);
-  position: sticky;
-  top: 0;
-  z-index: 40;
+  padding: 0 16px;
+  background: var(--mac-window-bg);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border-bottom: 1px solid var(--mac-border-subtle);
+  z-index: 100;
+  gap: 12px;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Compact Brand Badge */
 .brand {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 8px;
 }
 
-.brand-icon {
-  position: relative;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan));
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 10px 3px 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--mac-border-subtle);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--mac-inner-bevel);
+}
+
+.brand-icon-mini {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--apple-blue), #5856d6);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  box-shadow: var(--shadow-glow);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(10, 132, 255, 0.4);
 }
 
-.pulse-ring {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: var(--radius-md);
-  border: 2px solid var(--accent-cyan);
-  opacity: 0.5;
-  animation: pulse-ring 2.5s infinite;
-}
-
-@keyframes pulse-ring {
-  0% { transform: scale(1); opacity: 0.6; }
-  100% { transform: scale(1.3); opacity: 0; }
-}
-
-.brand-text h1 {
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.brand-text h1 span {
-  font-size: 0.75rem;
+.brand-title {
+  font-size: 0.85rem;
   font-weight: 600;
-  text-transform: uppercase;
-  padding: 0.15rem 0.5rem;
-  background: rgba(99, 102, 241, 0.2);
-  color: var(--accent-primary);
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(99, 102, 241, 0.3);
-}
-
-.subtitle {
-  font-size: 0.825rem;
-  color: var(--text-muted);
-}
-
-.header-actions {
+  letter-spacing: -0.01em;
+  color: var(--mac-text-primary);
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 5px;
+}
+
+.brand-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 1px 5px;
+  border-radius: var(--radius-xs);
+  background: var(--apple-blue-subtle);
+  color: var(--apple-blue);
+  border: 1px solid rgba(10, 132, 255, 0.25);
+}
+
+/* Header Status Pill */
+.header-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .server-status {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 0.85rem;
-  border-radius: var(--radius-full);
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.04);
-  font-size: 0.8rem;
-  color: var(--text-secondary);
+  border: 1px solid var(--mac-border-subtle);
+  font-size: 0.75rem;
+  color: var(--mac-text-secondary);
 }
 
 .status-dot {
-  width: 8px;
-  height: 8px;
+  width: 6.5px;
+  height: 6.5px;
   border-radius: 50%;
-  background: var(--meter-green);
-  box-shadow: 0 0 8px var(--meter-green);
+  background: var(--apple-green);
+  box-shadow: 0 0 6px var(--apple-green-glow);
 }
 
 .server-status.disconnected .status-dot {
-  background: var(--meter-red);
-  box-shadow: 0 0 8px var(--meter-red);
+  background: var(--apple-red);
+  box-shadow: 0 0 6px var(--apple-red-glow);
 }
 
-/* Buttons */
+/* Header Action Buttons */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Standard Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 1.1rem;
-  border-radius: var(--radius-md);
+  justify-content: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
   font-family: inherit;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   cursor: pointer;
-  border: none;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.97);
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan));
+  background: linear-gradient(180deg, #1a8dff 0%, var(--apple-blue) 100%);
   color: white;
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .btn-primary:hover {
-  opacity: 0.92;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-glow);
+  background: linear-gradient(180deg, #2694ff 0%, var(--apple-blue-hover) 100%);
+  box-shadow: 0 2px 8px var(--apple-blue-glow);
 }
 
-.btn-icon:hover {
-  background: var(--bg-card-hover);
-  color: var(--text-primary);
-  border-color: var(--border-glow);
-  transform: translateY(-1px);
-}
-
-.btn-danger {
-  color: #f43f5e;
-  background: rgba(244, 63, 94, 0.1);
-  border: 1px solid rgba(244, 63, 94, 0.25);
-}
-
-.btn-danger:hover {
-  background: rgba(244, 63, 94, 0.22);
-  color: #fff;
-  border-color: rgba(244, 63, 94, 0.5);
-  box-shadow: 0 0 14px rgba(244, 63, 94, 0.4);
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--mac-text-primary);
+  border: 1px solid var(--mac-border-subtle);
+  box-shadow: var(--mac-inner-bevel);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--mac-border-medium);
 }
 
 .btn-ghost {
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--mac-text-secondary);
 }
 
 .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-primary);
+  background: var(--mac-surface-hover);
+  color: var(--mac-text-primary);
 }
 
 .btn-icon {
-  padding: 0.55rem;
-  border-radius: var(--radius-md);
-  background: var(--bg-surface-elevated);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-subtle);
-  cursor: pointer;
-  transition: all 0.2s ease;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--mac-text-secondary);
+  border: 1px solid var(--mac-border-subtle);
+  box-shadow: var(--mac-inner-bevel);
 }
 
 .btn-icon:hover {
-  color: var(--text-primary);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--mac-text-primary);
+  border-color: var(--mac-border-medium);
+}
+
+.btn-danger {
+  color: var(--apple-red);
+  background: var(--apple-red-subtle);
+  border-color: rgba(255, 69, 58, 0.25);
+}
+
+.btn-danger:hover {
+  background: rgba(255, 69, 58, 0.25);
+  color: #fff;
+  border-color: rgba(255, 69, 58, 0.5);
+  box-shadow: 0 0 10px var(--apple-red-glow);
+}
+
+.btn-xs {
+  padding: 2px 7px;
+  font-size: 0.725rem;
+  border-radius: var(--radius-xs);
+  height: 22px;
 }
 
 .btn-sm {
-  padding: 0.35rem 0.75rem;
+  padding: 4px 10px;
   font-size: 0.775rem;
+  height: 28px;
 }
 
-/* Main Layout */
-.app-main {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 2rem;
+/* ==========================================================================
+   2. Studio Board (Two-Column Side-by-Side Mixer Grid)
+   ========================================================================== */
+.studio-board {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 14px;
+  padding: 14px 16px 82px;
+  height: calc(100vh - 48px);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+@media (max-width: 860px) {
+  .studio-board {
+    grid-template-columns: 1fr;
+    height: auto;
+    overflow-y: auto;
+  }
+}
+
+/* Columns */
+.sources-column {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  height: 100%;
+  min-height: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--mac-surface-card);
+  border: 1px solid var(--mac-border-subtle);
+  box-shadow: var(--mac-inner-bevel), 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
-.sources-section {
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.section-header {
+/* Column Header (Sticky Top) */
+.column-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--border-subtle);
-  padding-bottom: 1rem;
+  padding: 10px 14px;
+  background: rgba(20, 22, 30, 0.75);
+  border-bottom: 1px solid var(--mac-border-subtle);
+  backdrop-filter: blur(16px);
 }
 
-.section-title {
+.column-title {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 8px;
 }
 
-.section-badge {
-  width: 36px;
-  height: 36px;
+.column-badge {
+  width: 26px;
+  height: 26px;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
@@ -303,198 +397,262 @@ body {
 }
 
 .app-badge {
-  background: rgba(99, 102, 241, 0.15);
-  color: var(--accent-primary);
+  background: var(--apple-blue-subtle);
+  color: var(--apple-blue);
+  border: 1px solid rgba(10, 132, 255, 0.25);
 }
 
 .mic-badge {
-  background: rgba(6, 182, 212, 0.15);
-  color: var(--accent-cyan);
+  background: rgba(100, 210, 255, 0.15);
+  color: var(--apple-teal);
+  border: 1px solid rgba(100, 210, 255, 0.25);
 }
 
-.section-title h2 {
-  font-size: 1.15rem;
+.column-title h2 {
+  font-size: 0.875rem;
   font-weight: 600;
-}
-
-.section-desc {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-.section-controls {
+  letter-spacing: -0.01em;
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 6px;
 }
 
-/* Source Card List */
+.badge-count {
+  font-size: 0.675rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mac-text-secondary);
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+}
+
+.column-desc {
+  font-size: 0.7rem;
+  color: var(--mac-text-muted);
+}
+
+.column-controls {
+  display: flex;
+  gap: 4px;
+}
+
+/* Source Card List (Scrollable Area) */
 .sources-list {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  min-height: 100px;
+  gap: 5px;
+  padding: 8px;
+  overflow-y: auto;
+  min-height: 0;
 }
 
+/* ==========================================================================
+   3. Source Row Item (Compact Pro Audio Density ~46px)
+   ========================================================================== */
 .source-card {
   display: grid;
-  grid-template-columns: 44px 1fr 220px 48px;
+  grid-template-columns: 32px 1fr 140px 58px;
   align-items: center;
-  gap: 1.25rem;
-  padding: 0.9rem 1.25rem;
+  gap: 10px;
+  padding: 6px 10px;
   border-radius: var(--radius-md);
-  background: rgba(18, 21, 32, 0.6);
-  border: 1px solid var(--border-subtle);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(22, 24, 32, 0.5);
+  border: 1px solid var(--mac-border-subtle);
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   user-select: none;
+  min-height: 46px;
 }
 
 .source-card:hover {
-  background: rgba(26, 30, 46, 0.8);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(35, 38, 52, 0.7);
+  border-color: var(--mac-border-medium);
+  transform: translateY(-0.5px);
 }
 
+/* Armed / Selected State */
 .source-card.selected {
-  background: rgba(99, 102, 241, 0.12);
-  border-color: var(--border-active);
+  background: rgba(34, 38, 56, 0.85);
+  border-color: rgba(10, 132, 255, 0.4);
+  box-shadow: 0 2px 10px rgba(10, 132, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
+/* Avatar / App Icon */
 .source-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-sm);
-  background: var(--bg-surface-elevated);
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: rgba(45, 48, 64, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-subtle);
+  font-size: 1rem;
+  color: var(--mac-text-secondary);
+  border: 1px solid var(--mac-border-subtle);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
 }
 
+/* Info Section */
 .source-info {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  gap: 1px;
 }
 
 .source-name {
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.8125rem;
+  color: var(--mac-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.01em;
 }
 
 .source-meta {
-  font-size: 0.75rem;
-  color: var(--text-muted);
+  font-size: 0.675rem;
+  color: var(--mac-text-muted);
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 5px;
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 .tag-pid {
-  padding: 0.1rem 0.35rem;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
   font-family: var(--font-mono);
+  font-size: 0.625rem;
 }
 
 .tag-streams {
-  padding: 0.1rem 0.45rem;
-  border-radius: 4px;
-  background: rgba(99, 102, 241, 0.2);
-  color: #818cf8;
-  font-size: 0.7rem;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--apple-blue-subtle);
+  color: #70b4ff;
+  font-size: 0.625rem;
   font-weight: 600;
-  border: 1px solid rgba(99, 102, 241, 0.3);
 }
 
 .tag-mic {
-  padding: 0.1rem 0.45rem;
-  border-radius: 4px;
-  background: rgba(6, 182, 212, 0.15);
-  color: var(--accent-cyan);
-  font-size: 0.7rem;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(100, 210, 255, 0.15);
+  color: var(--apple-teal);
+  font-size: 0.625rem;
   font-weight: 600;
-  border: 1px solid rgba(6, 182, 212, 0.3);
+}
+
+.tag-specs {
+  color: var(--mac-text-dim);
+  font-size: 0.625rem;
 }
 
 /* Audio Level Canvas Meter */
 .meter-container {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 2px;
+  width: 140px;
 }
 
 .meter-labels {
   display: flex;
   justify-content: space-between;
-  font-size: 0.65rem;
+  font-size: 0.58rem;
   font-family: var(--font-mono);
-  color: var(--text-muted);
+  color: var(--mac-text-muted);
+  line-height: 1;
 }
 
 .meter-canvas {
   width: 100%;
-  height: 14px;
-  border-radius: 4px;
-  background: var(--meter-bg);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+  height: 9px;
+  border-radius: 3px;
+  background: #12141c;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+  display: block;
 }
 
-/* Custom Checkbox */
+/* Logic Pro Style [REC / ARM] Toggle Button */
 .checkbox-wrapper {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 }
 
 .custom-checkbox {
-  appearance: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  border: 2px solid var(--text-muted);
-  background: transparent;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-.custom-checkbox:checked {
-  background: var(--accent-primary);
-  border-color: var(--accent-primary);
-}
-
-.custom-checkbox:checked::after {
-  content: '✓';
   position: absolute;
-  color: white;
-  font-size: 13px;
-  font-weight: bold;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
 }
 
+.arm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 54px;
+  height: 24px;
+  border-radius: var(--radius-xs);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--mac-border-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.675rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--mac-text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: var(--mac-inner-bevel);
+}
+
+.arm-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.15s ease;
+}
+
+/* Selected ARM Button State (Logic Pro Glowing Red/Coral) */
+.source-card.selected .arm-btn {
+  background: rgba(255, 69, 58, 0.18);
+  border-color: rgba(255, 69, 58, 0.55);
+  color: #ff6e65;
+  box-shadow: 0 0 10px rgba(255, 69, 58, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.source-card.selected .arm-dot {
+  background: var(--apple-red);
+  box-shadow: 0 0 6px var(--apple-red);
+}
+
+/* Empty State */
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem 1rem;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  gap: 1rem;
+  padding: 2.5rem 1rem;
+  color: var(--mac-text-muted);
+  font-size: 0.8rem;
+  gap: 0.75rem;
+  text-align: center;
 }
 
 .spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top-color: var(--accent-cyan);
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--apple-blue);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -503,158 +661,203 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* Master Record Control Bar */
+/* ==========================================================================
+   4. Master Studio Dock Control Bar (Floating / Docked Bottom)
+   ========================================================================== */
 .record-control-bar {
   position: fixed;
-  bottom: 1.5rem;
+  bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
-  width: calc(100% - 4rem);
-  max-width: 1000px;
+  width: calc(100% - 32px);
+  max-width: 880px;
+  height: 54px;
   border-radius: var(--radius-lg);
-  padding: 1rem 2rem;
+  padding: 0 18px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-  z-index: 50;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(22, 24, 32, 0.86);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border: 1px solid var(--mac-border-medium);
+  box-shadow: var(--shadow-dock), var(--mac-inner-bevel);
+  z-index: 90;
 }
 
+/* Dock Left: Armed Summary */
 .rec-info-left {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  align-items: center;
+  gap: 10px;
+  min-width: 180px;
 }
 
 .selection-summary {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
+  color: var(--mac-text-secondary);
 }
 
 .armed-count {
-  color: var(--accent-cyan);
+  color: var(--apple-blue);
   font-weight: 700;
+  font-family: var(--font-mono);
 }
 
 .mode-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+  gap: 6px;
+  font-size: 0.725rem;
 }
 
 .mode-tag {
   background: rgba(255, 255, 255, 0.08);
-  padding: 0.15rem 0.5rem;
-  border-radius: 4px;
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
   font-family: var(--font-mono);
+  font-size: 0.675rem;
+  color: var(--mac-text-secondary);
+  border: 1px solid var(--mac-border-subtle);
 }
 
+.mode-type {
+  font-size: 0.7rem;
+  color: var(--mac-text-muted);
+}
+
+/* Dock Center: Apple Record Button & Timer */
 .rec-center {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 16px;
 }
 
 .btn-record {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  padding: 0.75rem 1.65rem;
-  border-radius: var(--radius-full);
-  background: linear-gradient(135deg, #e11d48, var(--rec-red));
+  gap: 8px;
+  padding: 7px 16px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, #ff4f44 0%, var(--apple-red) 100%);
   color: white;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: var(--shadow-rec);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px var(--apple-red-glow), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-record:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 30px var(--rec-red);
+  transform: scale(1.02);
+  background: linear-gradient(180deg, #ff5f56 0%, #ff3b30 100%);
+  box-shadow: 0 4px 16px rgba(255, 69, 58, 0.5);
+}
+
+.btn-record:active {
+  transform: scale(0.98);
 }
 
 .record-icon-wrapper {
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .record-icon {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: white;
   transition: all 0.2s ease;
 }
 
-/* Recording State */
+/* Recording Active State */
 .btn-record.recording {
-  background: #1e293b;
-  border: 1px solid var(--rec-red);
-  box-shadow: 0 0 20px var(--rec-red-glow);
+  background: linear-gradient(180deg, #262936 0%, #1a1d26 100%);
+  border-color: rgba(255, 69, 58, 0.6);
+  color: #ff5f56;
+  box-shadow: 0 0 14px var(--apple-red-glow);
 }
 
 .btn-record.recording .record-icon {
-  width: 12px;
-  height: 12px;
+  width: 9px;
+  height: 9px;
   border-radius: 2px;
-  background: var(--rec-red);
+  background: var(--apple-red);
   animation: blink 1s infinite;
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.85); }
 }
 
 .rec-timer-container {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .rec-timer {
   font-family: var(--font-mono);
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: var(--text-primary);
+  font-size: 1.15rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--mac-text-primary);
 }
 
 .rec-status-badge {
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-size: 0.65rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 0.1rem 0.4rem;
-  border-radius: 4px;
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
 }
 
 .rec-status-badge.idle {
   background: rgba(255, 255, 255, 0.06);
-  color: var(--text-muted);
+  color: var(--mac-text-muted);
 }
 
 .rec-status-badge.active {
-  background: rgba(239, 68, 68, 0.2);
-  color: var(--rec-red);
-  border: 1px solid rgba(239, 68, 68, 0.4);
+  background: var(--apple-red-subtle);
+  color: var(--apple-red);
+  border: 1px solid rgba(255, 69, 58, 0.4);
+  animation: pulse-badge 1.8s infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Dock Right: Apple Switch */
+.rec-info-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 180px;
+}
+
+.quick-settings {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .toggle-switch {
   position: relative;
   display: inline-block;
-  width: 44px;
-  height: 24px;
+  width: 36px;
+  height: 20px;
 }
 
 .toggle-switch input {
@@ -667,105 +870,113 @@ body {
   position: absolute;
   cursor: pointer;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(255, 255, 255, 0.1);
-  transition: .3s;
-  border-radius: 34px;
-  border: 1px solid var(--border-subtle);
+  background-color: rgba(255, 255, 255, 0.12);
+  transition: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 20px;
+  border: 1px solid var(--mac-border-subtle);
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 16px;
-  width: 16px;
-  left: 3px;
-  bottom: 3px;
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 2px;
   background-color: white;
-  transition: .3s;
+  transition: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 input:checked + .slider {
-  background-color: var(--accent-primary);
+  background-color: var(--apple-blue);
 }
 
 input:checked + .slider:before {
-  transform: translateX(20px);
-}
-
-.quick-settings {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  transform: translateX(16px);
 }
 
 .toggle-label {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
+  font-size: 0.775rem;
+  color: var(--mac-text-secondary);
 }
 
-/* Completion Toast */
+/* ==========================================================================
+   5. Result Completion Toast (macOS Notification Style)
+   ========================================================================== */
 .completion-toast {
   position: fixed;
-  bottom: 6.5rem;
-  right: 2rem;
-  padding: 1.25rem;
+  bottom: 74px;
+  right: 18px;
+  padding: 12px 14px;
   border-radius: var(--radius-md);
   display: flex;
-  gap: 1rem;
+  gap: 12px;
   align-items: flex-start;
-  max-width: 400px;
-  z-index: 60;
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  animation: slide-up 0.3s ease;
+  max-width: 380px;
+  z-index: 120;
+  background: rgba(24, 26, 34, 0.94);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(48, 209, 88, 0.3);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), var(--mac-inner-bevel);
+  animation: mac-slide-up 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes slide-up {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+@keyframes mac-slide-up {
+  from { transform: translateY(16px) scale(0.97); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 .toast-icon {
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  background: rgba(16, 185, 129, 0.2);
-  color: var(--meter-green);
+  background: rgba(48, 209, 88, 0.18);
+  color: var(--apple-green);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 1.1rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
 }
 
 .toast-body h4 {
-  font-size: 0.95rem;
-  margin-bottom: 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 2px;
 }
 
 .toast-body p {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--mac-text-secondary);
+  margin-bottom: 8px;
 }
 
 .toast-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 6px;
 }
 
-/* Modal */
+/* ==========================================================================
+   6. macOS Preferences Sheet (Settings Modal)
+   ========================================================================== */
 .modal-backdrop {
   position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(0, 0, 0, 0.75);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
-  animation: fade-in 0.2s ease;
+  z-index: 200;
+  animation: fade-in 0.15s ease;
 }
 
 @keyframes fade-in {
@@ -775,67 +986,90 @@ input:checked + .slider:before {
 
 .modal-window {
   width: 90%;
-  max-width: 540px;
-  padding: 1.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  max-width: 480px;
+  background: rgba(28, 30, 40, 0.94);
+  backdrop-filter: blur(36px) saturate(200%);
+  -webkit-backdrop-filter: blur(36px) saturate(200%);
+  border: 1px solid var(--mac-border-highlight);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-window), var(--mac-inner-bevel);
+  overflow: hidden;
+  animation: sheet-down 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes sheet-down {
+  from { transform: translateY(-20px) scale(0.96); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--border-subtle);
-  padding-bottom: 0.75rem;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--mac-border-subtle);
+  background: rgba(20, 22, 30, 0.5);
 }
 
 .modal-header h3 {
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .btn-close {
-  background: transparent;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
   border: none;
-  font-size: 1.5rem;
-  color: var(--text-muted);
+  color: var(--mac-text-secondary);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  line-height: 1;
 }
 
 .btn-close:hover {
-  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
 }
 
 .modal-body {
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 14px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 6px;
 }
 
 .form-label {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--mac-text-secondary);
 }
 
 .form-hint {
-  font-size: 0.75rem;
-  color: var(--text-muted);
+  font-size: 0.7rem;
+  color: var(--mac-text-muted);
+  line-height: 1.35;
 }
 
+/* Apple Segmented Controls */
 .segmented-control {
   display: flex;
-  background: var(--bg-surface);
-  border-radius: var(--radius-md);
-  padding: 4px;
-  border: 1px solid var(--border-subtle);
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  border: 1px solid var(--mac-border-subtle);
+  gap: 2px;
 }
 
 .segmented-control input {
@@ -845,63 +1079,51 @@ input:checked + .slider:before {
 .segmented-control label {
   flex: 1;
   text-align: center;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.825rem;
+  padding: 5px 8px;
+  font-size: 0.775rem;
   font-weight: 500;
-  color: var(--text-secondary);
-  border-radius: var(--radius-sm);
+  color: var(--mac-text-secondary);
   cursor: pointer;
-  transition: all 0.2s ease;
+  border-radius: var(--radius-xs);
+  transition: all 0.15s ease;
+  user-select: none;
 }
 
 .segmented-control input:checked + label {
-  background: var(--accent-primary);
-  color: white;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  font-weight: 600;
 }
 
 .form-select, .form-input {
   width: 100%;
-  padding: 0.65rem 0.9rem;
-  border-radius: var(--radius-md);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-primary);
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--mac-border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--mac-text-primary);
   font-family: inherit;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
+  outline: none;
+  transition: border-color 0.15s ease;
 }
 
 .form-select:focus, .form-input:focus {
-  outline: none;
-  border-color: var(--accent-primary);
+  border-color: var(--apple-blue);
+  box-shadow: 0 0 0 2px var(--apple-blue-subtle);
 }
 
 .input-group {
   display: flex;
-  gap: 0.5rem;
+  gap: 6px;
 }
 
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
-  border-top: 1px solid var(--border-subtle);
-  padding-top: 1rem;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .app-main { padding: 1rem; }
-  .source-card {
-    grid-template-columns: 36px 1fr 40px;
-    gap: 0.75rem;
-  }
-  .meter-container {
-    grid-column: 1 / -1;
-    margin-top: 0.25rem;
-  }
-  .record-control-bar {
-    width: 95%;
-    padding: 0.75rem 1rem;
-  }
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--mac-border-subtle);
+  background: rgba(20, 22, 30, 0.5);
 }

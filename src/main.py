@@ -56,7 +56,7 @@ def launch_app_window(url: str):
                 browser_bin,
                 f"--app={url}",
                 f"--user-data-dir={chrome_profile}",
-                "--window-size=1080,780",
+                "--window-size=1060,720",
                 "--class=s_audio_pin",
                 "--name=s_audio_pin",
                 "--no-first-run",
