@@ -1,24 +1,32 @@
 #!/usr/bin/env bash
 set -e
 
+APP_ID="io.github.skakadu007.SAudioPin"
 APPS_DIR="$HOME/.local/share/applications"
 HICOLOR_DIR="$HOME/.local/share/icons/hicolor"
 
-rm -f "$APPS_DIR/s-audio-pin.desktop"
-rm -f "$APPS_DIR/s_audio_pin.desktop"
-rm -f "$APPS_DIR/127.0.0.1__.desktop"
+rm -f \
+    "$APPS_DIR/${APP_ID}.desktop" \
+    "$APPS_DIR/s-audio-pin.desktop" \
+    "$APPS_DIR/s_audio_pin.desktop" \
+    "$APPS_DIR/127.0.0.1__.desktop"
 
-rm -f "$HICOLOR_DIR/scalable/apps/s-audio-pin.svg"
-rm -f "$HICOLOR_DIR/scalable/apps/s_audio_pin.svg"
-rm -f "$HICOLOR_DIR/scalable/apps/127.0.0.1.svg"
-rm -f "$HOME/.local/share/icons/s-audio-pin.svg"
-rm -f "$HOME/.local/share/icons/s_audio_pin.svg"
+rm -f \
+    "$HICOLOR_DIR/scalable/apps/${APP_ID}.svg" \
+    "$HICOLOR_DIR/scalable/apps/s-audio-pin.svg" \
+    "$HICOLOR_DIR/scalable/apps/s_audio_pin.svg" \
+    "$HICOLOR_DIR/scalable/apps/127.0.0.1.svg" \
+    "$HOME/.local/share/icons/s-audio-pin.svg" \
+    "$HOME/.local/share/icons/s_audio_pin.svg"
 
 for size in 48 64 128 256 512; do
-    rm -f "$HICOLOR_DIR/${size}x${size}/apps/s-audio-pin.png"
-    rm -f "$HICOLOR_DIR/${size}x${size}/apps/s_audio_pin.png"
-    rm -f "$HICOLOR_DIR/${size}x${size}/apps/127.0.0.1.png"
-    rm -f "$HICOLOR_DIR/${size}x${size}/apps/127.0.0.1__.png"
+    DIR="$HICOLOR_DIR/${size}x${size}/apps"
+    rm -f \
+        "$DIR/${APP_ID}.png" \
+        "$DIR/s-audio-pin.png" \
+        "$DIR/s_audio_pin.png" \
+        "$DIR/127.0.0.1.png" \
+        "$DIR/127.0.0.1__.png"
 done
 
 rm -f "$HOME/.local/bin/s-audio-pin"

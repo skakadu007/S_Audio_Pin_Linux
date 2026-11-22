@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>S_Audio_Pin — Linux Audio Monitor &amp; Selective Recorder</title>
+  <link rel="manifest" href="/static/manifest.json">
+  <link rel="icon" type="image/svg+xml" href="/static/img/icon.svg">
+  <link rel="icon" type="image/png" sizes="48x48" href="/static/img/icon_48.png">
+  <link rel="icon" type="image/png" sizes="128x128" href="/static/img/icon_128.png">
+  <link rel="icon" type="image/png" sizes="256x256" href="/static/img/icon_256.png">
+  <link rel="apple-touch-icon" href="/static/img/icon_256.png">
+  <link rel="stylesheet" href="/static/css/style.css?v=3.2">
+</head>
+<body class="theme-dark">
+  <div class="app-container">
+
+    <!-- Unified Header / Titlebar -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="brand">
+          <div class="brand-badge">
+            <div class="brand-icon-mini">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="22"></line>
+              </svg>
+            </div>
+            <span class="brand-title">S_Audio_Pin <span class="brand-tag">STUDIO</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="server-status" id="wsStatus">
+          <span class="status-dot"></span>
+          <span class="status-text" data-i18n="connected">Підключено</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn btn-secondary btn-sm" id="btnLangToggle" title="Перемкнути мову / Switch language" data-i18n-title="langToggleTitle">UK</button>
+        <button class="btn btn-secondary btn-sm" id="btnHistory" title="Історія збережених записів" data-i18n-title="historyTitle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span data-i18n="historyBtn">Історія</span>
+        </button>
+        <button class="btn btn-secondary btn-sm" id="btnOpenRecordings" title="Відкрити папку записів" data-i18n-title="openFolderTitle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span data-i18n="recordingsBtn">Записи</span>
+        </button>
+        <button class="btn btn-icon" id="btnOpenSettings" title="Налаштування запису" data-i18n-title="settingsTitle">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+        <button class="btn btn-icon btn-danger" id="btnQuitApp" title="Повністю вимкнути додаток" data-i18n-title="quitTitle">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+            <line x1="12" y1="2" x2="12" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Health / Warning Banner -->
+    <div class="health-banner" id="healthBanner" style="display: none;">
+      <div class="health-banner-content">
+        <span class="health-banner-icon">⚠️</span>
+        <span class="health-banner-text" id="healthBannerText"></span>
+      </div>
+      <button class="btn-close" id="btnDismissHealthBanner" title="Сховати" data-i18n-title="hideLabel">&times;</button>
+    </div>
+
+    <!-- Main Studio Board -->
+    <main class="studio-board">
+
+      <!-- Left Column: Active Applications -->
+      <section class="sources-column apps-column card glass">
+        <div class="column-header">
+          <div class="column-title">
+            <div class="column-badge app-badge">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+            <div>
+              <h2><span data-i18n="appsHeading">Програми</span> <span class="badge-count" id="appsCount">0</span></h2>
+              <p class="column-desc" data-i18n="appsDesc">Активні аудіопотоки системи</p>
+            </div>
+          </div>
+          <div class="column-controls">
+            <button class="btn btn-xs btn-ghost" id="btnSelectAllApps" data-i18n="selectAll">Обрати всі</button>
+            <button class="btn btn-xs btn-ghost" id="btnDeselectAllApps" data-i18n="deselectAll">Зняти</button>
+          </div>
+        </div>
+
+        <div class="sources-list" id="appsList">
+          <div class="empty-state">
+            <div class="spinner"></div>
+            <p data-i18n="searchingApps">Пошук активних програм із аудіо...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Microphones & Audio Inputs -->
+      <section class="sources-column mics-column card glass">
+        <div class="column-header">
+          <div class="column-title">
+            <div class="column-badge mic-badge">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              </svg>
+            </div>
+            <div>
+              <h2><span data-i18n="micsHeading">Мікрофони</span> <span class="badge-count" id="micsCount">0</span></h2>
+              <p class="column-desc" data-i18n="micsDesc">Фізичні та віртуальні входи</p>
+            </div>
+          </div>
+          <div class="column-controls">
+            <button class="btn btn-xs btn-ghost" id="btnSelectAllMics" data-i18n="selectAll">Обрати всі</button>
+            <button class="btn btn-xs btn-ghost" id="btnDeselectAllMics" data-i18n="deselectAll">Зняти</button>
+          </div>
+        </div>
+
+        <div class="sources-list" id="micsList">
+          <div class="empty-state">
+            <div class="spinner"></div>
+            <p data-i18n="detectingMics">Виявлення мікрофонів...</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Master Studio Recording Control Bar -->
+    <footer class="record-control-bar glass">
+      <div class="rec-info-left">
+        <div class="selection-summary">
+          <span class="armed-count" id="armedCount">0</span> <span data-i18n="sourcesSuffix">джерел</span>
+        </div>
+        <div class="mode-pill" id="modePill">
+          <span class="mode-tag" id="configFormatTag">MP3 • 320k</span>
+          <span class="mode-type" id="configModeTag">Зведений мікс</span>
+        </div>
+      </div>
+
+      <div class="rec-center">
+        <button class="btn-record" id="btnRecordToggle">
+          <span class="record-icon-wrapper">
+            <span class="record-icon"></span>
+          </span>
+          <span class="record-label" id="recordBtnLabel" data-i18n="startRecord">Почати запис</span>
+        </button>
+        <div class="rec-timer-container">
+          <span class="rec-timer" id="recTimer">00:00:00</span>
+          <span class="rec-status-badge idle" id="recBadge">Готовий</span>
+        </div>
+      </div>
+
+      <div class="rec-info-right">
+        <div class="quick-settings" id="quickSettingsBox">
+          <label class="toggle-switch">
+            <input type="checkbox" id="quickModeToggle">
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-label" id="quickModeLabel" data-i18n="stemsToggle">Стеми (Окремі)</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Notification Toast (Success / Info / Warning / Error) -->
+    <div class="completion-toast glass" id="completionToast" style="display: none;">
+      <div class="toast-icon" id="toastIcon">✓</div>
+      <div class="toast-body">
+        <h4 id="toastTitle">Запис успішно збережено!</h4>
+        <p id="toastDetails">Тривалість: 00:15 • 1.2 MB</p>
+        <div class="toast-actions">
+          <button class="btn btn-xs btn-primary" id="btnToastOpenFolder" data-i18n="openFolderBtn">Відкрити папку</button>
+          <button class="btn btn-xs btn-ghost" id="btnToastDismiss" data-i18n="closeBtn">Закрити</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-backdrop" id="settingsModal" style="display: none;">
+      <div class="modal-window glass card">
+        <div class="modal-header">
+          <h3 data-i18n="settingsHeading">Налаштування запису</h3>
+          <button class="btn-close" id="btnCloseSettings">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" data-i18n="audioFormatLabel">Формат аудіо</label>
+            <div class="segmented-control">
+              <input type="radio" id="fmtMp3" name="audioFormat" value="mp3" checked>
+              <label for="fmtMp3">MP3</label>
+              <input type="radio" id="fmtWav" name="audioFormat" value="wav">
+              <label for="fmtWav">WAV</label>
+              <input type="radio" id="fmtFlac" name="audioFormat" value="flac">
+              <label for="fmtFlac">FLAC</label>
+              <input type="radio" id="fmtOgg" name="audioFormat" value="ogg">
+              <label for="fmtOgg">OGG (Opus)</label>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group" id="bitrateGroup">
+              <label class="form-label" data-i18n="bitrateLabel">Бітрейт</label>
+              <select class="form-select" id="settingBitrate">
+                <option value="128k" data-i18n="bitrate128">128 kbps (Стандарт)</option>
+                <option value="192k" data-i18n="bitrate192">192 kbps (Висока якість)</option>
+                <option value="256k" data-i18n="bitrate256">256 kbps (Дуже висока)</option>
+                <option value="320k" selected data-i18n="bitrate320">320 kbps (Максимум)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" data-i18n="sampleRateLabel">Частота дискретизації</label>
+              <select class="form-select" id="settingSampleRate">
+                <option value="48000" selected data-i18n="sr48000">48000 Hz (Студія)</option>
+                <option value="44100" data-i18n="sr44100">44100 Hz (CD)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" data-i18n="recordModeLabel">Режим запису до файлу</label>
+            <div class="segmented-control">
+              <input type="radio" id="modeSingle" name="recordMode" value="single_mix" checked>
+              <label for="modeSingle" data-i18n="modeSingleOption">Один майстер-мікс (Single Mix)</label>
+              <input type="radio" id="modeMulti" name="recordMode" value="multi_stem">
+              <label for="modeMulti" data-i18n="modeMultiOption">Окремі файли (Stems)</label>
+            </div>
+            <p class="form-hint" data-i18n="modeHint">У режимі "Stems" кожна програма та мікрофон записуються в індивідуальний синхронізований файл для монтажу.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" data-i18n="outputDirLabel">Папка для збереження записів</label>
+            <div class="input-group">
+              <input type="text" class="form-input" id="settingOutputDir" placeholder="~/Recordings/S_Audio_Pin">
+              <button class="btn btn-secondary" type="button" id="btnOpenFolderPicker" data-i18n="browseBtn">Огляд</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-ghost" id="btnCancelSettings" data-i18n="cancelBtn">Скасувати</button>
+          <button class="btn btn-primary" id="btnSaveSettings" data-i18n="saveBtn">Зберегти</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recordings History Modal -->
+    <div class="modal-backdrop" id="historyModal" style="display: none;">
+      <div class="modal-window modal-wide glass card">
+        <div class="modal-header">
+          <h3 data-i18n="historyHeading">Історія записів</h3>
+          <button class="btn-close" id="btnCloseHistory">&times;</button>
+        </div>
+        <div class="modal-body history-body">
+          <div class="history-list" id="historyList">
+            <div class="empty-state">
+              <div class="spinner"></div>
+              <p data-i18n="loadingHistory">Завантаження списку записів...</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="btnHistoryOpenDir" data-i18n="openFolderBtn">Відкрити папку</button>
+          <button class="btn btn-primary" id="btnHistoryCloseFooter" data-i18n="closeBtn">Закрити</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- In-App Confirmation Modal -->
+    <div class="modal-backdrop" id="confirmModal" style="display: none;">
+      <div class="modal-window modal-compact glass card">
+        <div class="modal-header">
+          <h3 id="confirmTitle" data-i18n="confirmHeading">Підтвердження</h3>
+          <button class="btn-close" id="btnCloseConfirm">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="confirm-message" id="confirmMessage"></p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" id="btnConfirmCancel" data-i18n="cancelBtn">Скасувати</button>
+          <button class="btn btn-primary" id="btnConfirmAccept" data-i18n="confirmBtn">Підтвердити</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/static/js/visualizer.js?v=3.2"></script>
+  <script src="/static/js/app.js?v=3.2"></script>
+</body>
+</html>

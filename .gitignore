@@ -46,3 +46,7 @@ recordings/
 output/
 *.wav
 *.mp3
+
+# AI / Local Agent Tooling
+.agents/
+.specify/

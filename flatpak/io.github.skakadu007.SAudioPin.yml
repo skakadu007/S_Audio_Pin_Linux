@@ -1,0 +1,36 @@
+app-id: io.github.skakadu007.SAudioPin
+runtime: org.gnome.Platform
+runtime-version: '50'
+sdk: org.gnome.Sdk
+command: s-audio-pin
+
+finish-args:
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
+  - --device=dri
+  - --socket=pulseaudio
+  - --filesystem=xdg-music:create
+  # Local 127.0.0.1 loopback works inside Flatpak without --share=network.
+  # org.gnome.Platform//50 already includes parec, ffmpeg (libmp3lame, flac, libopus,
+  # amix, alimiter), libpulse.so.0, Python 3.13, GTK4, and WebKit 6.0.
+  # Before submitting to Flathub:
+  # 1. Generate offline Python wheels/sources via `req2flatpak` into python3-deps.json
+  #    and include it below before the s-audio-pin module.
+  # 2. Replace local `dir` source below with git tag + commit hash + public screenshots in metainfo.xml.
+
+modules:
+  # - python3-deps.json
+
+  - name: s-audio-pin
+    buildsystem: simple
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} --no-build-isolation --no-deps .
+      - install -Dm644 data/io.github.skakadu007.SAudioPin.desktop ${FLATPAK_DEST}/share/applications/io.github.skakadu007.SAudioPin.desktop
+      - install -Dm644 data/io.github.skakadu007.SAudioPin.metainfo.xml ${FLATPAK_DEST}/share/metainfo/io.github.skakadu007.SAudioPin.metainfo.xml
+      - install -Dm644 assets/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/io.github.skakadu007.SAudioPin.svg
+      - for size in 48 64 128 256 512; do install -Dm644 assets/icon_${size}.png ${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/io.github.skakadu007.SAudioPin.png; done
+    sources:
+      - type: dir
+        path: ..
+

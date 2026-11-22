@@ -2,6 +2,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+APP_ID="io.github.skakadu007.SAudioPin"
 ICON_SRC="$SCRIPT_DIR/assets/icon.svg"
 RUN_SCRIPT="$SCRIPT_DIR/run.sh"
 
@@ -10,35 +11,46 @@ HICOLOR_DIR="$HOME/.local/share/icons/hicolor"
 BIN_DIR="$HOME/.local/bin"
 
 mkdir -p "$APPS_DIR" "$BIN_DIR"
+chmod +x "$RUN_SCRIPT"
 
-# Clean old entries first
-rm -f "$APPS_DIR/s-audio-pin.desktop" "$APPS_DIR/s_audio_pin.desktop" "$APPS_DIR/127.0.0.1__.desktop"
+# Clean legacy desktop entries & icon aliases
+rm -f \
+    "$APPS_DIR/s-audio-pin.desktop" \
+    "$APPS_DIR/s_audio_pin.desktop" \
+    "$APPS_DIR/127.0.0.1__.desktop" \
+    "$APPS_DIR/${APP_ID}.desktop"
+
+rm -f \
+    "$HICOLOR_DIR/scalable/apps/s_audio_pin.svg" \
+    "$HICOLOR_DIR/scalable/apps/127.0.0.1.svg" \
+    "$HOME/.local/share/icons/s_audio_pin.svg"
+
+for size in 48 64 128 256 512; do
+    DIR="$HICOLOR_DIR/${size}x${size}/apps"
+    rm -f \
+        "$DIR/s_audio_pin.png" \
+        "$DIR/127.0.0.1.png" \
+        "$DIR/127.0.0.1__.png"
+done
 
 # 1. Install SVG scalable icon
 mkdir -p "$HICOLOR_DIR/scalable/apps"
-cp "$ICON_SRC" "$HICOLOR_DIR/scalable/apps/s-audio-pin.svg"
-cp "$ICON_SRC" "$HICOLOR_DIR/scalable/apps/s_audio_pin.svg"
-cp "$ICON_SRC" "$HICOLOR_DIR/scalable/apps/127.0.0.1.svg" 2>/dev/null || true
-cp "$ICON_SRC" "$HOME/.local/share/icons/s-audio-pin.svg" 2>/dev/null || true
-cp "$ICON_SRC" "$HOME/.local/share/icons/s_audio_pin.svg" 2>/dev/null || true
+cp "$ICON_SRC" "$HICOLOR_DIR/scalable/apps/${APP_ID}.svg"
 
-# 2. Install multi-resolution PNG icons for Dock, Panel, and Alt-Tab switcher
+# 2. Install multi-resolution PNG icons
 for size in 48 64 128 256 512; do
     DIR="$HICOLOR_DIR/${size}x${size}/apps"
     mkdir -p "$DIR"
     if [ -f "$SCRIPT_DIR/assets/icon_${size}.png" ]; then
-        cp "$SCRIPT_DIR/assets/icon_${size}.png" "$DIR/s-audio-pin.png"
-        cp "$SCRIPT_DIR/assets/icon_${size}.png" "$DIR/s_audio_pin.png"
-        cp "$SCRIPT_DIR/assets/icon_${size}.png" "$DIR/127.0.0.1.png"
-        cp "$SCRIPT_DIR/assets/icon_${size}.png" "$DIR/127.0.0.1__.png"
+        cp "$SCRIPT_DIR/assets/icon_${size}.png" "$DIR/${APP_ID}.png"
     fi
 done
 
 # 3. Install CLI symlink
 ln -sf "$RUN_SCRIPT" "$BIN_DIR/s-audio-pin"
 
-# 4. Create primary .desktop file (The ONLY one visible in App Menu)
-cat > "$APPS_DIR/s-audio-pin.desktop" <<EOF
+# 4. Install single clean .desktop file matching GTK application_id
+cat > "$APPS_DIR/${APP_ID}.desktop" <<EOF
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -48,42 +60,16 @@ GenericName[uk]=Моніторинг процесів та запис аудіо
 Comment=Monitor audio-playing processes and selectively record applications and microphones
 Comment[uk]=Моніторинг процесів зі звуком та вибірковий запис програм і мікрофонів
 Exec=$RUN_SCRIPT
-Icon=s-audio-pin
+Icon=${APP_ID}
 Terminal=false
 Categories=AudioVideo;Audio;Recorder;
 Keywords=audio;sound;record;process;microphone;vu;pipewire;pulseaudio;
 StartupNotify=true
-StartupWMClass=s_audio_pin
+StartupWMClass=${APP_ID}
 EOF
 
-chmod +x "$APPS_DIR/s-audio-pin.desktop"
+chmod +x "$APPS_DIR/${APP_ID}.desktop"
 
-# 5. Hidden alias desktop files for Wayland/GNOME WM_CLASS window matching (NoDisplay=true)
-cat > "$APPS_DIR/s_audio_pin.desktop" <<EOF
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=S_Audio_Pin
-Exec=$RUN_SCRIPT
-Icon=s-audio-pin
-Terminal=false
-NoDisplay=true
-StartupWMClass=s_audio_pin
-EOF
-
-cat > "$APPS_DIR/127.0.0.1__.desktop" <<EOF
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=S_Audio_Pin
-Exec=$RUN_SCRIPT
-Icon=s-audio-pin
-Terminal=false
-NoDisplay=true
-StartupWMClass=127.0.0.1__
-EOF
-
-# 6. Update icon cache and desktop database
 if command -v gtk-update-icon-cache >/dev/null 2>&1; then
     gtk-update-icon-cache -f -t "$HICOLOR_DIR" 2>/dev/null || true
 fi
@@ -93,8 +79,8 @@ if command -v update-desktop-database >/dev/null 2>&1; then
 fi
 
 echo "============================================================"
-echo "  🎉 S_Audio_Pin успішно налаштовано!"
+echo "  S_Audio_Pin успішно встановлено!"
 echo "============================================================"
-echo "• У меню програм тепер РІВНО ОДНА іконка S_Audio_Pin."
-echo "• Налаштовано приховані мапінги WM_CLASS для панелі та Alt+Tab."
+echo "• Desktop entry: $APPS_DIR/${APP_ID}.desktop"
+echo "• CLI команда:   $BIN_DIR/s-audio-pin"
 echo "============================================================"

@@ -1,0 +1,16 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=S_Audio_Pin
+GenericName=Audio Process Monitor & Recorder
+GenericName[uk]=Моніторинг процесів та запис аудіо
+Comment=Monitor audio-playing processes and selectively record applications and microphones
+Comment[uk]=Моніторинг процесів зі звуком та вибірковий запис програм і мікрофонів
+Exec=s-audio-pin
+Icon=io.github.skakadu007.SAudioPin
+Terminal=false
+Categories=AudioVideo;Audio;Recorder;
+Keywords=audio;sound;record;process;microphone;vu;pipewire;pulseaudio;
+StartupNotify=true
+StartupWMClass=io.github.skakadu007.SAudioPin
+

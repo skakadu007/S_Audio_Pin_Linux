@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.skakadu007.SAudioPin</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+
+  <name>S_Audio_Pin</name>
+  <summary>Monitor per-app audio and selectively record applications and microphones</summary>
+  <summary xml:lang="uk">Моніторинг процесів зі звуком та вибірковий запис програм і мікрофонів</summary>
+
+  <description>
+    <p>
+      S_Audio_Pin is a lightweight Linux desktop audio process monitor and multi-source
+      pinpoint recorder built for PipeWire and PulseAudio.
+    </p>
+    <p>
+      Select individual applications and microphones with live logarithmic dB VU meters
+      and record either a combined master mix or synchronized multitrack stems in MP3,
+      WAV, FLAC, or OGG Opus formats.
+    </p>
+    <p xml:lang="uk">
+      S_Audio_Pin — легкий додаток для Linux для моніторингу аудіопотоків окремих
+      програм і мікрофонів та точкового запису без системних сповіщень у записі.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">io.github.skakadu007.SAudioPin.desktop</launchable>
+
+  <developer id="io.github.skakadu007">
+    <name>skakadu007</name>
+  </developer>
+
+  <url type="homepage">https://github.com/skakadu007/S_Audio_Pin_Linux</url>
+  <url type="bugtracker">https://github.com/skakadu007/S_Audio_Pin_Linux/issues</url>
+  <url type="vcs-browser">https://github.com/skakadu007/S_Audio_Pin_Linux</url>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#0a84ff</color>
+    <color type="primary" scheme_preference="dark">#0c0d12</color>
+  </branding>
+
+  <content_rating type="oars-1.1" />
+
+  <releases>
+    <release version="0.2.0" date="2026-11-22">
+      <description>
+        <ul>
+          <li>Native GTK4 + WebKitGTK 6.0 window shell with XDG portal folder picker</li>
+          <li>Bluetooth A2DP protection and resilient stream reconnection during sink switches</li>
+          <li>Added FLAC and OGG Opus formats, logarithmic dB VU meters, and recordings history</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+</component>
+
