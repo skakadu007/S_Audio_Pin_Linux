@@ -43,12 +43,28 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/skakadu007/S_Audio_Pin_Linux/v0.2.1/docs/screenshots/main-window.png</image>
-      <caption>Main window showing audio sources, dB VU meters, and recording controls</caption>
+      <image>https://raw.githubusercontent.com/skakadu007/S_Audio_Pin_Linux/v0.2.2/docs/screenshots/main-window.png</image>
+      <caption>Main window with per-application and microphone audio meters</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/skakadu007/S_Audio_Pin_Linux/v0.2.2/docs/screenshots/settings.png</image>
+      <caption>Recording settings supporting MP3, WAV, FLAC, and OGG Opus formats</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/skakadu007/S_Audio_Pin_Linux/v0.2.2/docs/screenshots/history.png</image>
+      <caption>Recordings history modal for managing saved sessions</caption>
     </screenshot>
   </screenshots>
 
   <releases>
+    <release version="0.2.2" date="2026-11-23">
+      <description>
+        <ul>
+          <li>Fixed WebKitGTK blank screen inside offline Flatpak sandboxes by bypassing proxy portal resolution for localhost</li>
+          <li>Updated GTK 4.22 dark color scheme handling, avoided JSC signal 10 override, and added English screenshots</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2.1" date="2026-11-23">
       <description>
         <ul>
@@ -68,3 +84,4 @@
     </release>
   </releases>
 </component>
+

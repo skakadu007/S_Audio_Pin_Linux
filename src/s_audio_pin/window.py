@@ -169,18 +169,16 @@ def _install_glib_signal_quit(app) -> None:
     try:
         from gi.repository import GLibUnix
 
-        for sig in (signal.SIGTERM, signal.SIGUSR1):
-            GLibUnix.signal_add(GLib.PRIORITY_DEFAULT, sig, _on_signal)
+        GLibUnix.signal_add(GLib.PRIORITY_DEFAULT, signal.SIGTERM, _on_signal)
         return
     except Exception:
         pass
 
     if hasattr(GLib, "unix_signal_add"):
-        for sig in (signal.SIGTERM, signal.SIGUSR1):
-            try:
-                GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, sig, _on_signal)
-            except Exception:
-                pass
+        try:
+            GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGTERM, _on_signal)
+        except Exception:
+            pass
 
 
 def run_gtk_window(
@@ -218,7 +216,10 @@ def run_gtk_window(
 
         gtk_settings = Gtk.Settings.get_default()
         if gtk_settings is not None:
-            gtk_settings.set_property("gtk-application-prefer-dark-theme", True)
+            if hasattr(Gtk, "InterfaceColorScheme") and gtk_settings.find_property("gtk-interface-color-scheme"):
+                gtk_settings.set_property("gtk-interface-color-scheme", Gtk.InterfaceColorScheme.DARK)
+            else:
+                gtk_settings.set_property("gtk-application-prefer-dark-theme", True)
 
         icon_tmpdir = _setup_icon_theme(app_id, icon_path)
 
@@ -231,6 +232,11 @@ def run_gtk_window(
             _ACTIVE_WIN = win
 
         webview = WebKit.WebView()
+        # Disable proxy portal lookup so 127.0.0.1 loopback loads inside offline Flatpak sandboxes
+        net_session = webview.get_network_session()
+        if net_session is not None:
+            net_session.set_proxy_settings(WebKit.NetworkProxyMode.NO_PROXY, None)
+
         rgba = Gdk.RGBA()
         if rgba.parse("#0c0d12"):
             webview.set_background_color(rgba)
@@ -239,6 +245,18 @@ def run_gtk_window(
         if wk_settings is not None:
             wk_settings.set_enable_smooth_scrolling(True)
             wk_settings.set_enable_javascript(True)
+
+        webview.connect(
+            "load-failed",
+            lambda _view, event, failed_uri, err: logger.warning(
+                "WebKit load failed (%s) for %s: %s", event, failed_uri, err
+            )
+            or False,
+        )
+        webview.connect(
+            "web-process-terminated",
+            lambda _view, reason: logger.warning("WebKit web process terminated: %s", reason),
+        )
 
         webview.load_uri(url)
         win.set_child(webview)
