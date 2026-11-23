@@ -1,0 +1,33 @@
+app-id: io.github.skakadu007.S_Audio_Pin_Linux
+runtime: org.gnome.Platform
+runtime-version: '51'
+sdk: org.gnome.Sdk
+command: s-audio-pin
+
+finish-args:
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
+  - --device=dri
+  - --socket=pulseaudio
+  - --filesystem=xdg-music:create
+  # Local 127.0.0.1 loopback works inside Flatpak without --share=network.
+  # org.gnome.Platform//51 already includes parec, ffmpeg (libmp3lame, flac, libopus,
+  # amix, alimiter), libpulse.so.0, Python 3.14, GTK4, and WebKit 6.0.
+
+modules:
+  - python3-deps.json
+
+  - name: s-audio-pin
+    buildsystem: simple
+    build-commands:
+      - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} --no-build-isolation --no-deps .
+      - install -Dm644 data/io.github.skakadu007.S_Audio_Pin_Linux.desktop ${FLATPAK_DEST}/share/applications/io.github.skakadu007.S_Audio_Pin_Linux.desktop
+      - install -Dm644 data/io.github.skakadu007.S_Audio_Pin_Linux.metainfo.xml ${FLATPAK_DEST}/share/metainfo/io.github.skakadu007.S_Audio_Pin_Linux.metainfo.xml
+      - install -Dm644 assets/icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/io.github.skakadu007.S_Audio_Pin_Linux.svg
+      - for size in 48 64 128 256 512; do install -Dm644 assets/icon_${size}.png ${FLATPAK_DEST}/share/icons/hicolor/${size}x${size}/apps/io.github.skakadu007.S_Audio_Pin_Linux.png; done
+    sources:
+      - type: git
+        url: https://github.com/skakadu007/S_Audio_Pin_Linux.git
+        tag: v0.2.1
+        commit: f390fa00e7b18d93dff0a7050353cc8deb375269
