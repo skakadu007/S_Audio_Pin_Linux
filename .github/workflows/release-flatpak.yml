@@ -88,3 +88,4 @@ jobs:
           files: |
             release-assets/S_Audio_Pin_Linux-x86_64.flatpak
             release-assets/SHA256SUMS.txt
+
