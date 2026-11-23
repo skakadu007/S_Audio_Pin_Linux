@@ -50,3 +50,9 @@ output/
 # AI / Local Agent Tooling
 .agents/
 .specify/
+
+# Flatpak
+.flatpak-builder/
+build-dir/
+repo-dir/
+*.flatpak

@@ -20,7 +20,7 @@ def _resolve_xdg_music_dir() -> Path:
         return Path(env_music).expanduser()
 
     try:
-        from gi.repository import GLib
+        from gi.repository import GLib  # type: ignore[import-not-found]
 
         glib_dir = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_MUSIC)
         if glib_dir:

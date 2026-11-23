@@ -41,8 +41,15 @@
 
   <content_rating type="oars-1.1" />
 
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/skakadu007/S_Audio_Pin_Linux/v0.2.0/docs/screenshots/main-window.png</image>
+      <caption>Main window showing audio sources, dB VU meters, and recording controls</caption>
+    </screenshot>
+  </screenshots>
+
   <releases>
-    <release version="0.2.0" date="2026-11-22">
+    <release version="0.2.0" date="2026-11-23">
       <description>
         <ul>
           <li>Native GTK4 + WebKitGTK 6.0 window shell with XDG portal folder picker</li>
