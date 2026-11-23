@@ -20,7 +20,7 @@ import urllib.request
 from pathlib import Path
 from typing import Optional
 
-APP_ID = "io.github.skakadu007.SAudioPin"
+APP_ID = "io.github.skakadu007.S_Audio_Pin_Linux"
 logger = logging.getLogger("s_audio_pin.window")
 
 _ACTIVE_LOCK = threading.Lock()

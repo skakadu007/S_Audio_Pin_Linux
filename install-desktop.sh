@@ -2,7 +2,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-APP_ID="io.github.skakadu007.SAudioPin"
+APP_ID="io.github.skakadu007.S_Audio_Pin_Linux"
 ICON_SRC="$SCRIPT_DIR/assets/icon.svg"
 RUN_SCRIPT="$SCRIPT_DIR/run.sh"
 
@@ -18,11 +18,13 @@ rm -f \
     "$APPS_DIR/s-audio-pin.desktop" \
     "$APPS_DIR/s_audio_pin.desktop" \
     "$APPS_DIR/127.0.0.1__.desktop" \
+    "$APPS_DIR/io.github.skakadu007.SAudioPin.desktop" \
     "$APPS_DIR/${APP_ID}.desktop"
 
 rm -f \
     "$HICOLOR_DIR/scalable/apps/s_audio_pin.svg" \
     "$HICOLOR_DIR/scalable/apps/127.0.0.1.svg" \
+    "$HICOLOR_DIR/scalable/apps/io.github.skakadu007.SAudioPin.svg" \
     "$HOME/.local/share/icons/s_audio_pin.svg"
 
 for size in 48 64 128 256 512; do
@@ -30,7 +32,8 @@ for size in 48 64 128 256 512; do
     rm -f \
         "$DIR/s_audio_pin.png" \
         "$DIR/127.0.0.1.png" \
-        "$DIR/127.0.0.1__.png"
+        "$DIR/127.0.0.1__.png" \
+        "$DIR/io.github.skakadu007.SAudioPin.png"
 done
 
 # 1. Install SVG scalable icon

@@ -1,6 +1,6 @@
 [project]
 name = "s-audio-pin-linux"
-version = "0.2.0"
+version = "0.2.1"
 description = "Lightweight Linux Desktop Audio Process Monitor & Multi-Source Pinpoint Recorder"
 readme = "README.md"
 license = {text = "MIT"}

@@ -7,10 +7,9 @@ GenericName[uk]=Моніторинг процесів та запис аудіо
 Comment=Monitor audio-playing processes and selectively record applications and microphones
 Comment[uk]=Моніторинг процесів зі звуком та вибірковий запис програм і мікрофонів
 Exec=s-audio-pin
-Icon=io.github.skakadu007.SAudioPin
+Icon=io.github.skakadu007.S_Audio_Pin_Linux
 Terminal=false
 Categories=AudioVideo;Audio;Recorder;
 Keywords=audio;sound;record;process;microphone;vu;pipewire;pulseaudio;
 StartupNotify=true
-StartupWMClass=io.github.skakadu007.SAudioPin
-
+StartupWMClass=io.github.skakadu007.S_Audio_Pin_Linux

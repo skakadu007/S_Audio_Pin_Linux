@@ -114,7 +114,7 @@ async def lifespan(app: FastAPI):
         audio_monitor.stop()
 
 
-app = FastAPI(title="S_Audio_Pin_Linux API", version="0.2.0", lifespan=lifespan)
+app = FastAPI(title="S_Audio_Pin_Linux API", version="0.2.1", lifespan=lifespan)
 app.state.api_token = None
 app.state.shutdown_callback = None
 
