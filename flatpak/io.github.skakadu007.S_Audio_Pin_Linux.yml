@@ -29,5 +29,5 @@ modules:
     sources:
       - type: git
         url: https://github.com/skakadu007/S_Audio_Pin_Linux.git
-        tag: v0.2.2
-        commit: 8f332ff51a2df1e3dbed6ef32f2f619f56c89639
+        tag: v0.2.3
+        commit: a23d8f23403007277f6f7bc1ac13734078d7f66b
