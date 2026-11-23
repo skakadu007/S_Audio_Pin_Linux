@@ -57,6 +57,13 @@
   </screenshots>
 
   <releases>
+    <release version="0.2.3" date="2026-11-23">
+      <description>
+        <ul>
+          <li>Added automated GitHub Actions workflow to build and publish ready-to-install Flatpak bundles on GitHub Releases</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2.2" date="2026-11-23">
       <description>
         <ul>

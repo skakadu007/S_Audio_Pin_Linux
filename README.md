@@ -26,14 +26,22 @@
 
 ## 🛠️ Встановлення та запуск (Quickstart)
 
-### 1. Запуск з системного меню Linux (Desktop App)
+### 1. Встановлення готового Flatpak-пакета з GitHub Releases (рекомендовано)
+Завантажте `S_Audio_Pin_Linux-x86_64.flatpak` зі сторінки [GitHub Releases](https://github.com/skakadu007/S_Audio_Pin_Linux/releases/latest) та виконайте:
+```bash
+flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak install --user S_Audio_Pin_Linux-x86_64.flatpak
+flatpak run io.github.skakadu007.S_Audio_Pin_Linux
+```
+
+### 2. Запуск з системного меню Linux (Desktop App)
 ```bash
 ./install-desktop.sh
 ```
 Після цього знайдіть **`S_Audio_Pin`** у меню програм або запустіть із терміналу `s-audio-pin`.
 Для видалення з меню: `./uninstall-desktop.sh`.
 
-### 2. Запуск із репозиторію
+### 3. Запуск із репозиторію
 ```bash
 uv sync
 uv run s-audio-pin

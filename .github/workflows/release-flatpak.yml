@@ -1,0 +1,90 @@
+name: Build & Release Flatpak
+
+on:
+  push:
+    tags:
+      - "v*"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-flatpak:
+    name: Build Flatpak (x86_64)
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-51
+      options: --privileged
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Prepare CI Flatpak manifest for checked-out commit
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          rm -rf flatpak/.ci-src flatpak/ci-manifest.yml
+          mkdir -p flatpak/.ci-src
+          git archive HEAD | tar -x -C flatpak/.ci-src
+          python3 - <<'PY'
+          from pathlib import Path
+
+          text = Path("flatpak/io.github.skakadu007.S_Audio_Pin_Linux.yml").read_text(encoding="utf-8")
+          marker = "    sources:\n"
+          idx = text.rfind(marker)
+          assert idx != -1, "Could not find sources block in Flatpak manifest"
+          ci_manifest = text[:idx] + "    sources:\n      - type: dir\n        path: .ci-src\n"
+          Path("flatpak/ci-manifest.yml").write_text(ci_manifest, encoding="utf-8")
+          PY
+
+      - name: Build Flatpak bundle
+        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          manifest-path: flatpak/ci-manifest.yml
+          bundle: S_Audio_Pin_Linux-x86_64.flatpak
+          artifact-name: S_Audio_Pin_Linux-x86_64.flatpak
+          build-bundle: true
+          repository-url: https://flathub.org/repo/flathub.flatpakrepo
+          cache: true
+          cache-key: flatpak-builder-x86_64-${{ hashFiles('flatpak/io.github.skakadu007.S_Audio_Pin_Linux.yml', 'flatpak/python3-deps.json') }}
+          upload-artifact: true
+
+  release:
+    name: Publish GitHub Release
+    needs: build-flatpak
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download Flatpak bundle artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: S_Audio_Pin_Linux-x86_64.flatpak
+          path: release-assets
+
+      - name: Generate SHA256 checksums
+        run: |
+          cd release-assets
+          ls -lh S_Audio_Pin_Linux-x86_64.flatpak
+          sha256sum S_Audio_Pin_Linux-x86_64.flatpak > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          body: |
+            ## Встановлення готового Flatpak-пакета (x86_64)
+
+            ```bash
+            flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+            flatpak install --user S_Audio_Pin_Linux-x86_64.flatpak
+            flatpak run io.github.skakadu007.S_Audio_Pin_Linux
+            ```
+          files: |
+            release-assets/S_Audio_Pin_Linux-x86_64.flatpak
+            release-assets/SHA256SUMS.txt

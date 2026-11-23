@@ -56,3 +56,5 @@ output/
 build-dir/
 repo-dir/
 *.flatpak
+flatpak/.ci-src/
+flatpak/ci-manifest.yml

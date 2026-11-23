@@ -1,4 +1,4 @@
 """S_Audio_Pin_Linux — Lightweight Linux Audio Process Monitor & Selective Recorder."""
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 APP_ID = "io.github.skakadu007.S_Audio_Pin_Linux"
